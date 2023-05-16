@@ -20,8 +20,12 @@ const contacts_controller = (app) => {
         }
     })
 
-    app.post('/contacts/new', async (req, res) => {
+    app.post('/contacts/create', async (req, res) => {
         try {
+            const search = await Contact.find({number:req.body.number})
+            if(search.length>0){
+               return res.status(500).json({ message: 'number already exists' })
+            }
             const contacts = await Contact.create(req.body);
             res.status(200).json(contacts);
         } catch (error) {
@@ -37,7 +41,7 @@ const contacts_controller = (app) => {
                 res.status(404).json({message: `cannot find any contact with ID ${id}`})
             }
             const updated_contact = await Contact.findById(id)
-            res.status(200).json({'w':updated_contact});
+            res.status(200).json(updated_contact);
         } catch (error) {
             res.status(500).json({ message: error.message })
         }
@@ -48,7 +52,7 @@ const contacts_controller = (app) => {
             const {id} = req.params;
             const contact = await Contact.findByIdAndDelete(id);
             if(!contact){
-                return res.status(404).json({message: `cannot find any conatact with ID ${id}`})
+                return res.status(404).json({message: `cannot find any contact with ID ${id}`})
             }
             res.status(200).json(contact);
             

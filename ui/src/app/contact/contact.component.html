@@ -1,0 +1,29 @@
+<div class="layout-x">
+    <h2>Contacts</h2>
+    <div>
+        <button mat-raised-button color="primary" (click)="openDialog()"> <mat-icon>add</mat-icon> add contact</button>
+    </div>
+</div>
+
+<div class="mat-card" style="width: 60%; margin-left: auto; margin-right: auto;">
+    <mat-form-field style="width: 100%;" appearance="fill">
+        <mat-label>search</mat-label>
+        <input type="text" matInput [formControl]="contactInfo">
+    </mat-form-field>
+    <div >
+        <mat-card class="contact-row" *ngFor="let data of contacts">
+            <div class="details">
+                <span class="name-text">{{data.first_name}} {{data.last_name}}</span>
+                <span>{{data.number}}</span>
+            </div>
+            <div class="actions">
+                <button mat-icon-button color="primary" aria-label="Example icon button with a menu icon">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" aria-label="Example icon button with a open in new tab icon">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </mat-card>
+    </div>
+</div>
