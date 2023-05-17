@@ -32,11 +32,6 @@ export class ViewContactComponent {
   })
 
   ngAfterViewInit() {
-    this.contactFormGroup.valueChanges.subscribe(e => {
-
-      console.log(e);
-    })
-
     this.contactFormGroup.patchValue({
       first_name: this.dialogData.first_name,
       last_name: this.dialogData.last_name,
@@ -51,13 +46,12 @@ export class ViewContactComponent {
   save() {
     this.loading = true
     const model = this.contactFormGroup.value
-    const id = this.dialogData._id;
-    console.log(model);
+    const id = this.dialogData?._id;
 
     this.contactService.updateContact(id, model).subscribe(e => {
       this.loading = false;
-      this.snackBar.open('Updated contact successfully', 'close', { duration: 10000 })
-      this.close()
+      this.snackBar.open('contact updated successfully', 'close', { duration: 10000 })
+      this.close(true)
     }, err => {
       this.loading = false;
       console.log(err);
@@ -66,8 +60,8 @@ export class ViewContactComponent {
     })
   }
 
-  close() {
-    this.dialog.close()
+  close(close:Boolean) {
+    this.dialog.close(close)
   }
 
   handleErrorMessage(formControl: any) {

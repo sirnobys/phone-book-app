@@ -20,8 +20,9 @@ export class ContactComponent implements OnInit, OnChanges {
   dialogRef: any
   displayedColumns: string[] = ['first_name', 'last_name', 'number'];
   dataSource = new MatTableDataSource<IContact>();
-  contacts: any = []
-  contactInfo = new FormControl('');
+  contacts: any[] = []
+  search = new FormControl('');
+  contactCopy: any[] = []
   @ViewChild(MatPaginator) paginator: any;
 
   constructor(private contactService: ContactService, public dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -30,6 +31,9 @@ export class ContactComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+    this.search.valueChanges.subscribe(e => {
+      this.contacts = this.searchContact(e)
+    })
     this.update()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,12 +41,17 @@ export class ContactComponent implements OnInit, OnChanges {
   }
   openDialog() {
     this.dialogRef = this.dialog.open(AddContactComponent, { data: true, width: '400px' }).afterClosed().subscribe(data => {
-      this.update()
+      if (data) {
+        this.update()
+      }
     });
   }
   openUpdateDialog(id: any) {
     this.dialogRef = this.dialog.open(ViewContactComponent, { data: id, width: '400px' }).afterClosed().subscribe(data => {
-      this.update()
+
+      if (data) {
+        this.update()
+      }
     });
   }
 
@@ -51,6 +60,7 @@ export class ContactComponent implements OnInit, OnChanges {
     this.contactService.getContacts().subscribe(data => {
       this.loading = false
       this.contacts = data
+      this.contactCopy = data
     }, err => {
       this.loading = false;
       console.log(err);
@@ -61,7 +71,7 @@ export class ContactComponent implements OnInit, OnChanges {
 
   deleteContact(id: any) {
     const canDelete = window.confirm('Are you sure you want to delete?')
-    if(!canDelete){
+    if (!canDelete) {
       return
     }
     this.contactService.deleteContact(id).subscribe(e => {
@@ -74,6 +84,11 @@ export class ContactComponent implements OnInit, OnChanges {
       const message = err?.error?.message ? err?.error?.message : err?.statusText
       this.snackBar.open('error: ' + message, 'close', { duration: 10000 })
     })
+  }
+
+  searchContact(text: any) {
+    let search = this.contactCopy.filter(e => [e?.['first_name'], e?.['last_name'], e?.['number']].join(' ').toLocaleLowerCase().includes(text.toLocaleLowerCase()))
+    return search
   }
 }
 

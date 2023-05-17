@@ -12,7 +12,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./add-contact.component.css']
 })
 export class AddContactComponent {
-  // @ViewChild(ContactComponent) contactComponent!: ContactComponent
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialogRef<ContactComponent>,
@@ -34,14 +33,11 @@ export class AddContactComponent {
   })
 
   ngAfterViewInit() {
-    this.contactFormGroup.valueChanges.subscribe(e => {
 
-      console.log(e);
-    })
   }
 
-  close() {
-    this.dialog.close()
+  close(close:boolean) {
+    this.dialog.close(close)
   }
 
   canSave() {
@@ -55,7 +51,7 @@ export class AddContactComponent {
     this.contactService.createContact(model).subscribe(e => {
       this.loading = false;
       this.snackBar.open('contact created successfully', 'close', { duration: 10000 })
-      this.close()
+      this.close(true)
     }, err => {
       this.loading = false;
       console.log(err);
