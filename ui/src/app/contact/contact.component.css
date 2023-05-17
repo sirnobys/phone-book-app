@@ -13,13 +13,18 @@
     justify-content: space-around;
 }
 
-.contact-row > .details {
+.contact-row .details {
     display: flex;
     flex-direction: column;
     margin-left: 30px;
     /* padding-top: 5px; */
 }
-
+.contact-row .info {
+    display: flex;
+    flex-direction: row;
+    margin-left: 30px;
+    /* padding-top: 5px; */
+}
 .contact-row > .actions {
     display: flex;
     flex-direction: row;

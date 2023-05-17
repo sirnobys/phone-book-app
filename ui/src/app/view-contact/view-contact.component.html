@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Edit contact</h1>
+<div mat-dialog-content>
+    <form [formGroup]="contactFormGroup" class="layout-y">
+        <mat-form-field appearance="fill" *ngFor="let val of formControls">
+            <mat-label>{{val?.title}}</mat-label>
+            <input type="val?.type" matInput formControlName="{{val?.name}}">
+            <mat-error *ngIf="contactFormGroup.get(val.name)?.invalid">{{handleErrorMessage(val)}}</mat-error>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!canSave()">save</button><span class="loader" *ngIf="loading" ></span>
+  <button mat-button (click)="close()">close</button>
+</div>

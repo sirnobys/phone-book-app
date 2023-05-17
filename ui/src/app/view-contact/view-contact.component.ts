@@ -1,20 +1,18 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Inject } from '@angular/core'
-import { ContactComponent } from '../contact/contact.component';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactService } from '../service/contact.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ContactComponent, IContact } from '../contact/contact.component';
 
 @Component({
-  selector: 'app-add-contact',
-  templateUrl: './add-contact.component.html',
-  styleUrls: ['./add-contact.component.css']
+  selector: 'app-view-contact',
+  templateUrl: './view-contact.component.html',
+  styleUrls: ['./view-contact.component.css']
 })
-export class AddContactComponent {
-  // @ViewChild(ContactComponent) contactComponent!: ContactComponent
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+export class ViewContactComponent {
+  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: IContact,
     public dialog: MatDialogRef<ContactComponent>,
     private fb: FormBuilder,
     private contactService: ContactService,
@@ -38,10 +36,12 @@ export class AddContactComponent {
 
       console.log(e);
     })
-  }
 
-  close() {
-    this.dialog.close()
+    this.contactFormGroup.patchValue({
+      first_name: this.dialogData.first_name,
+      last_name: this.dialogData.last_name,
+      number: this.dialogData.number,
+    })
   }
 
   canSave() {
@@ -51,10 +51,12 @@ export class AddContactComponent {
   save() {
     this.loading = true
     const model = this.contactFormGroup.value
-  
-    this.contactService.createContact(model).subscribe(e => {
+    const id = this.dialogData._id;
+    console.log(model);
+
+    this.contactService.updateContact(id, model).subscribe(e => {
       this.loading = false;
-      this.snackBar.open('contact created successfully', 'close', { duration: 10000 })
+      this.snackBar.open('Updated contact successfully', 'close', { duration: 10000 })
       this.close()
     }, err => {
       this.loading = false;
@@ -62,6 +64,10 @@ export class AddContactComponent {
       const message = err?.error?.message ? err?.error?.message : err?.statusText
       this.snackBar.open('error: ' + message, 'close', { duration: 10000 })
     })
+  }
+
+  close() {
+    this.dialog.close()
   }
 
   handleErrorMessage(formControl: any) {
