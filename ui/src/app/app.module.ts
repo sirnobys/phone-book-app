@@ -19,12 +19,15 @@ import { AddContactComponent } from './add-contact/add-contact.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { ViewContactComponent } from './view-contact/view-contact.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ContactComponent,
-    AddContactComponent
+    AddContactComponent,
+    ViewContactComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatIconModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   providers: [ContactService],
   bootstrap: [AppComponent]
