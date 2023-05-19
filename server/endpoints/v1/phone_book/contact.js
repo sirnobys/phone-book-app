@@ -24,7 +24,7 @@ const contacts_controller = (app) => {
         try {
             const search = await Contact.find({ number: req.body.number })
             if (search.length > 0) {
-                return res.status(409).json({ message: 'number already exists' })
+                return res.status(409).json({ message: 'number already exists for another contact' })
             }
             const contacts = await Contact.create(req.body);
             res.status(200).json(contacts);
